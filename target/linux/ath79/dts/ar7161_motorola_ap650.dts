@@ -1,0 +1,154 @@
+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
+
+#include "ar7100.dtsi"
+
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/input/input.h>
+
+/ {
+	compatible = "motorola,ap650", "qca,ar7161";
+	model = "Motorola AP-650";
+
+	aliases {
+		label-mac-device = &eth0;
+	};
+};
+
+&pcie0 {
+	status = "okay";
+};
+
+&mdio0 {
+	status = "okay";
+
+	phy0: ethernet-phy@6 {
+		/*
+		 * When the compatible-is missing, PHY autodetection
+		 * is performed, but the PHY-ID reads all 0xff.
+		 *
+		 * Linux does not create the device in this case,
+		 * and the reset is never even de-asserted.
+		 */
+		compatible = "ethernet-phy-ieee802.3-c22";
+		reg = <6>;
+
+		resets = <&rst 8>;
+		reset-names = "phy";
+		reset-assert-us = <10000>;
+		reset-deassert-us = <10000>;
+	};
+};
+
+&eth0 {
+	status = "okay";
+
+	phy-mode = "rgmii-id";
+	phy-handle = <&phy0>;
+};
+
+&spi {
+	status = "okay";
+
+	flash@0 {
+		compatible = "jedec,spi-nor";
+		reg = <0>;
+		spi-max-frequency = <50000000>;
+
+		partitions {
+			compatible = "fixed-partitions";
+			#address-cells = <1>;
+			#size-cells = <1>;
+
+			partition@0 {
+				label = "bootstrap";
+				reg = <0x0 0x10000>;
+				read-only;
+			};
+
+			partition@10000 {
+				label = "boot1";
+				reg = <0x10000 0x60000>;
+				read-only;
+			};
+
+			partition@70000 {
+				label = "boot2";
+				reg = <0x70000 0x60000>;
+				read-only;
+			};
+
+			partition@d0000 {
+				label = "config";
+				reg = <0xd0000 0x10000>;
+				read-only;
+			};
+
+			partition@e0000 {
+				label = "linux1";
+				reg = <0xe0000 0x350000>;
+				read-only;
+			};
+
+			partition@430000 {
+				label = "linux2";
+				reg = <0x430000 0x350000>;
+				read-only;
+			};
+
+			partition@780000 {
+				label = "panic";
+				reg = <0x780000 0x70000>;
+				read-only;
+			};
+
+			partition@7f0000 {
+				label = "bootconfig";
+				reg = <0x7f0000 0x10000>;
+				read-only;
+			};
+		};
+	};
+
+	flash@1 {
+		compatible = "spi-nand";
+		reg = <1>;
+		spi-max-frequency = <50000000>;
+
+		partitions {
+			compatible = "fixed-partitions";
+			#address-cells = <1>;
+			#size-cells = <1>;
+
+			partition@0 {
+				label = "rootfs1";
+				reg = <0x0 0x2980000>;
+				read-only;
+			};
+
+			partition@2980000 {
+				label = "rootfs2";
+				reg = <0x2980000 0x2980000>;
+				read-only;
+			};
+
+			partition@5300000 {
+				label = "var2";
+				reg = <0x5300000 0x700000>;
+				read-only;
+			};
+
+			partition@5a00000 {
+				label = "etc2";
+				reg = <0x5a00000 0xa00000>;
+				read-only;
+			};
+
+			partition@6400000 {
+				label = "rootfs_data";
+				reg = <0x6400000 0x1c00000>;
+				read-only;
+			};
+		};
+	};
+
+};

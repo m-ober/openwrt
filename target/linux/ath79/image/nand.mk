@@ -314,6 +314,16 @@ define Device/meraki_mr18
 endef
 TARGET_DEVICES += meraki_mr18
 
+define Device/motorola_ap650
+  SOC := ar7161
+  DEVICE_VENDOR := Motorola
+  DEVICE_MODEL := AP-650
+  # DEVICE_PACKAGES :=
+  # KERNEL_SIZE :=
+  # BLOCKSIZE :=
+endef
+TARGET_DEVICES += motorola_ap650
+
 # fake rootfs is mandatory, pad-offset 129 equals (2 * uimage_header + '\0')
 define Device/netgear_ath79_nand
   DEVICE_VENDOR := NETGEAR
