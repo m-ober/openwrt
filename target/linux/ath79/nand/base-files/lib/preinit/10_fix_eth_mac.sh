@@ -3,6 +3,10 @@
 
 preinit_set_mac_address() {
 	case $(board_name) in
+	motorola,ap650)
+		ethaddr=$(mtd_get_mac_ascii config ethaddr)
+		ip link set dev eth0 address $ethaddr
+		;;
 	zyxel,emg2926-q10a|\
 	zyxel,nbg6716)
 		ethaddr=$(mtd_get_mac_ascii u-boot-env ethaddr)
