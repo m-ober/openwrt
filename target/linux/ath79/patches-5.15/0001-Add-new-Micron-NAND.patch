@@ -1,0 +1,33 @@
+From fc19326429226e5ea605f63c61bc061558fbb95f Mon Sep 17 00:00:00 2001
+From: Micha Ober <git@ober-mail.de>
+Date: Sat, 27 Jan 2024 20:07:41 +0100
+Subject: [PATCH] Add new Micron NAND
+
+---
+ drivers/mtd/nand/spi/micron.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/drivers/mtd/nand/spi/micron.c b/drivers/mtd/nand/spi/micron.c
+index 12601bc42..f1be05f45 100644
+--- a/drivers/mtd/nand/spi/micron.c
++++ b/drivers/mtd/nand/spi/micron.c
+@@ -281,6 +281,16 @@ static const struct spinand_info micron_spinand_table[] = {
+ 					      &x1_update_cache_variants),
+ 		     0,
+ 		     SPINAND_ECCINFO(&micron_4_ooblayout, NULL)),
++	/* M68A 1Gb 3.3V */
++	SPINAND_INFO("MT29F1G01AAADD",
++		     SPINAND_ID(SPINAND_READID_METHOD_OPCODE_DUMMY, 0x12),
++		     NAND_MEMORG(1, 2048, 64, 64, 1024, 20, 2, 1, 1),
++		     NAND_ECCREQ(4, 512),
++		     SPINAND_INFO_OP_VARIANTS(&x4_read_cache_variants,
++					      &x1_write_cache_variants,
++					      &x1_update_cache_variants),
++		     0,
++		     SPINAND_ECCINFO(&micron_4_ooblayout, NULL)),
+ };
+ 
+ static int micron_spinand_init(struct spinand_device *spinand)
+-- 
+2.34.1
+
