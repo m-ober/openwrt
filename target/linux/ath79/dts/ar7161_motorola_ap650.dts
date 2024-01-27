@@ -40,6 +40,13 @@
 
 		#address-cells = <1>;
 		#size-cells = <0>;
+
+		m41t11: rtc@68 {
+			status = "okay";
+
+			compatible = "st,m41t11";
+			reg = <0x68>;
+		};
 	};
 };
 
