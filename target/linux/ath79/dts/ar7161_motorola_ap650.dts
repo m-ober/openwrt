@@ -20,21 +20,21 @@
 		led_24: led-0 {
 			color = <LED_COLOR_ID_GREEN>;
 			function = LED_FUNCTION_WLAN;
-			gpios = <&gpio 3 GPIO_ACTIVE_LOW>;
+			gpios = <&gpio 3 GPIO_ACTIVE_HIGH>;
 		};
 
 		led_5: led-1 {
 			color = <LED_COLOR_ID_RED>;
 			function = LED_FUNCTION_WLAN;
-			gpios = <&gpio 4 GPIO_ACTIVE_LOW>;
+			gpios = <&gpio 4 GPIO_ACTIVE_HIGH>;
 		};
 	};
 
 	i2c {
 		compatible = "i2c-gpio";
 
-		sda-gpios = <&gpio 2 GPIO_ACTIVE_LOW>;
-		scl-gpios = <&gpio 1 GPIO_ACTIVE_LOW>;
+		sda-gpios = <&gpio 2 GPIO_ACTIVE_HIGH>;
+		scl-gpios = <&gpio 1 GPIO_ACTIVE_HIGH>;
 
 		#address-cells = <1>;
 		#size-cells = <0>;
