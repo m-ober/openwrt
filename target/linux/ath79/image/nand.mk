@@ -318,7 +318,7 @@ define Device/motorola_ap650
   SOC := ar7161
   DEVICE_VENDOR := Motorola
   DEVICE_MODEL := AP-650
-  # DEVICE_PACKAGES :=
+  DEVICE_PACKAGES := kmod-i2c-gpio
   # KERNEL_SIZE :=
   # BLOCKSIZE :=
 endef
