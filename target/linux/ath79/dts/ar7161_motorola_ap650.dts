@@ -4,6 +4,7 @@
 
 #include <dt-bindings/gpio/gpio.h>
 #include <dt-bindings/input/input.h>
+#include <dt-bindings/leds/common.h>
 
 / {
 	compatible = "motorola,ap650", "qca,ar7161";
@@ -11,6 +12,34 @@
 
 	aliases {
 		label-mac-device = &eth0;
+	};
+
+	leds {
+		compatible = "gpio-leds";
+
+		led_24: led-0 {
+			color = <LED_COLOR_ID_GREEN>;
+			function = LED_FUNCTION_WLAN;
+			linux,default-trigger = "phy0tpt";
+			gpios = <&gpio 3 GPIO_ACTIVE_HIGH>;
+		};
+
+		led_5: led-1 {
+			color = <LED_COLOR_ID_RED>;
+			function = LED_FUNCTION_WLAN;
+			linux,default-trigger = "phy1tpt";
+			gpios = <&gpio 4 GPIO_ACTIVE_HIGH>;
+		};
+	};
+
+	i2c {
+		compatible = "i2c-gpio";
+
+		sda-gpios = <&gpio 2 GPIO_ACTIVE_HIGH>;
+		scl-gpios = <&gpio 1 GPIO_ACTIVE_HIGH>;
+
+		#address-cells = <1>;
+		#size-cells = <0>;
 	};
 };
 
