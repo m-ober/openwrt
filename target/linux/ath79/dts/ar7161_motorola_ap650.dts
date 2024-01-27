@@ -20,12 +20,14 @@
 		led_24: led-0 {
 			color = <LED_COLOR_ID_GREEN>;
 			function = LED_FUNCTION_WLAN;
+			linux,default-trigger = "phy0tpt";
 			gpios = <&gpio 3 GPIO_ACTIVE_HIGH>;
 		};
 
 		led_5: led-1 {
 			color = <LED_COLOR_ID_RED>;
 			function = LED_FUNCTION_WLAN;
+			linux,default-trigger = "phy1tpt";
 			gpios = <&gpio 4 GPIO_ACTIVE_HIGH>;
 		};
 	};
