@@ -1,0 +1,52 @@
+From 51d4e6be655afc69a19894df87a2137bc1fec696 Mon Sep 17 00:00:00 2001
+From: Micha Ober <git@ober-mail.de>
+Date: Mon, 29 Jan 2024 20:49:53 +0100
+Subject: [PATCH] Add logging to mtdcore
+
+---
+ drivers/mtd/mtdcore.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/drivers/mtd/mtdcore.c b/drivers/mtd/mtdcore.c
+index 2a228ee32641..22ab5d19cade 100644
+--- a/drivers/mtd/mtdcore.c
++++ b/drivers/mtd/mtdcore.c
+@@ -1685,6 +1685,8 @@ int mtd_ooblayout_free(struct mtd_info *mtd, int section,
+ {
+ 	struct mtd_info *master = mtd_get_master(mtd);
+ 
++	printk(KERN_INFO "mtd_ooblayout_free memset");
++
+ 	memset(oobfree, 0, sizeof(*oobfree));
+ 
+ 	if (!master || section < 0)
+@@ -1693,6 +1695,8 @@ int mtd_ooblayout_free(struct mtd_info *mtd, int section,
+ 	if (!master->ooblayout || !master->ooblayout->free)
+ 		return -ENOTSUPP;
+ 
++	printk(KERN_INFO "mtd_ooblayout_free master->ooblayout->free");
++
+ 	return master->ooblayout->free(master, section, oobfree);
+ }
+ EXPORT_SYMBOL_GPL(mtd_ooblayout_free);
+@@ -1872,6 +1876,8 @@ static int mtd_ooblayout_count_bytes(struct mtd_info *mtd,
+ 	struct mtd_oob_region oobregion;
+ 	int section = 0, ret, nbytes = 0;
+ 
++	printk(KERN_INFO "mtd_ooblayout_count_bytes start");
++
+ 	while (1) {
+ 		ret = iter(mtd, section++, &oobregion);
+ 		if (ret) {
+@@ -1883,6 +1889,8 @@ static int mtd_ooblayout_count_bytes(struct mtd_info *mtd,
+ 		nbytes += oobregion.length;
+ 	}
+ 
++	printk(KERN_INFO "mtd_ooblayout_count_bytes end, ret = %d", ret);
++
+ 	return ret;
+ }
+ 
+-- 
+2.34.1
+
