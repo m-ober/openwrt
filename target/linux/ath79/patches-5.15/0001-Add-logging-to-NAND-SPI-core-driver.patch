@@ -1,0 +1,93 @@
+From dcfc57174d381bc95cf46e870408115a103e0c87 Mon Sep 17 00:00:00 2001
+From: Micha Ober <git@ober-mail.de>
+Date: Mon, 29 Jan 2024 20:19:00 +0100
+Subject: [PATCH] Add logging to NAND SPI core driver
+
+---
+ drivers/mtd/nand/spi/core.c | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
+
+diff --git a/drivers/mtd/nand/spi/core.c b/drivers/mtd/nand/spi/core.c
+index 2c8685f1f2fa..0eeb88f6abe0 100644
+--- a/drivers/mtd/nand/spi/core.c
++++ b/drivers/mtd/nand/spi/core.c
+@@ -1185,6 +1185,8 @@ static int spinand_init(struct spinand_device *spinand)
+ 	if (ret)
+ 		goto err_free_bufs;
+ 
++	dev_info(&spinand->spimem->spi->dev, "spinand_detect finished.\n");
++
+ 	/*
+ 	 * Use kzalloc() instead of devm_kzalloc() here, because some drivers
+ 	 * may use this buffer for DMA access.
+@@ -1198,16 +1200,22 @@ static int spinand_init(struct spinand_device *spinand)
+ 		goto err_free_bufs;
+ 	}
+ 
++	dev_info(&spinand->spimem->spi->dev, "kzalloc finished.\n");
++
+ 	spinand->oobbuf = spinand->databuf + nanddev_page_size(nand);
+ 
+ 	ret = spinand_init_cfg_cache(spinand);
+ 	if (ret)
+ 		goto err_free_bufs;
+ 
++	dev_info(&spinand->spimem->spi->dev, "spinand_init_cfg_cache finished.\n");
++
+ 	ret = spinand_init_flash(spinand);
+ 	if (ret)
+ 		goto err_free_bufs;
+ 
++	dev_info(&spinand->spimem->spi->dev, "spinand_init_flash finished.\n");
++
+ 	ret = spinand_create_dirmaps(spinand);
+ 	if (ret) {
+ 		dev_err(dev,
+@@ -1216,10 +1224,14 @@ static int spinand_init(struct spinand_device *spinand)
+ 		goto err_manuf_cleanup;
+ 	}
+ 
++	dev_info(&spinand->spimem->spi->dev, "spinand_create_dirmaps finished.\n");
++
+ 	ret = nanddev_init(nand, &spinand_ops, THIS_MODULE);
+ 	if (ret)
+ 		goto err_manuf_cleanup;
+ 
++	dev_info(&spinand->spimem->spi->dev, "nanddev_init finished.\n");
++
+ 	/* SPI-NAND default ECC engine is on-die */
+ 	nand->ecc.defaults.engine_type = NAND_ECC_ENGINE_TYPE_ON_DIE;
+ 	nand->ecc.ondie_engine = &spinand_ondie_ecc_engine;
+@@ -1229,6 +1241,8 @@ static int spinand_init(struct spinand_device *spinand)
+ 	if (ret)
+ 		goto err_cleanup_nanddev;
+ 
++	dev_info(&spinand->spimem->spi->dev, "nanddev_ecc_engine_init finished.\n");
++
+ 	mtd->_read_oob = spinand_mtd_read;
+ 	mtd->_write_oob = spinand_mtd_write;
+ 	mtd->_block_isbad = spinand_mtd_block_isbad;
+@@ -1242,7 +1256,11 @@ static int spinand_init(struct spinand_device *spinand)
+ 		ret = mtd_ooblayout_count_freebytes(mtd);
+ 		if (ret < 0)
+ 			goto err_cleanup_ecc_engine;
++		dev_info(&spinand->spimem->spi->dev,
++			"mtd_ooblayout_count_freebytes finished.\n");
+ 	}
++	dev_info(&spinand->spimem->spi->dev, "if (nand->ecc.engine) finished.\n");
++
+ 
+ 	mtd->oobavail = ret;
+ 
+@@ -1250,6 +1268,8 @@ static int spinand_init(struct spinand_device *spinand)
+ 	mtd->ecc_strength = nanddev_get_ecc_conf(nand)->strength;
+ 	mtd->ecc_step_size = nanddev_get_ecc_conf(nand)->step_size;
+ 
++	dev_info(&spinand->spimem->spi->dev, "nanddev_get_ecc_conf finished.\n");
++
+ 	return 0;
+ 
+ err_cleanup_ecc_engine:
+-- 
+2.34.1
+
