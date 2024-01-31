@@ -1,0 +1,28 @@
+From 7b4d41e0befba09d4390fdd44f2580f02c4995f2 Mon Sep 17 00:00:00 2001
+From: Micha Ober <git@ober-mail.de>
+Date: Wed, 31 Jan 2024 22:44:45 +0100
+Subject: [PATCH] Fix micron_4_ooblayout_free
+
+---
+ drivers/mtd/nand/spi/micron.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/mtd/nand/spi/micron.c b/drivers/mtd/nand/spi/micron.c
+index f1be05f45c96..b70a328ce5c0 100644
+--- a/drivers/mtd/nand/spi/micron.c
++++ b/drivers/mtd/nand/spi/micron.c
+@@ -106,9 +106,10 @@ static int micron_4_ooblayout_free(struct mtd_info *mtd, int section,
+ 				   struct mtd_oob_region *region)
+ {
+ 	struct spinand_device *spinand = mtd_to_spinand(mtd);
++	struct nand_device *nand = mtd_to_nanddev(mtd);
+ 
+ 	if (section >= spinand->base.memorg.pagesize /
+-			mtd->ecc_step_size)
++			nanddev_get_ecc_conf(nand)->step_size)
+ 		return -ERANGE;
+ 
+ 	if (section) {
+-- 
+2.34.1
+
