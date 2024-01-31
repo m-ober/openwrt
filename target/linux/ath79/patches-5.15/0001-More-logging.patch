@@ -1,0 +1,24 @@
+From 1c17edbdb17feddfc2abbf1dd76a08807cb4378d Mon Sep 17 00:00:00 2001
+From: Micha Ober <git@ober-mail.de>
+Date: Wed, 31 Jan 2024 20:25:39 +0100
+Subject: [PATCH] More logging
+
+---
+ drivers/mtd/mtdcore.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/mtd/mtdcore.c b/drivers/mtd/mtdcore.c
+index 22ab5d19cade..e56f06088fb8 100644
+--- a/drivers/mtd/mtdcore.c
++++ b/drivers/mtd/mtdcore.c
+@@ -1887,6 +1887,7 @@ static int mtd_ooblayout_count_bytes(struct mtd_info *mtd,
+ 		}
+ 
+ 		nbytes += oobregion.length;
++		printk(KERN_INFO "mtd_ooblayout_count_bytes nbytes = %d", nbytes);
+ 	}
+ 
+ 	printk(KERN_INFO "mtd_ooblayout_count_bytes end, ret = %d", ret);
+-- 
+2.34.1
+
