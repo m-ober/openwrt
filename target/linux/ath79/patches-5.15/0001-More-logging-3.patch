@@ -1,0 +1,56 @@
+From 6867a722b33a92c67a53d6d81f8be17c561f6f9d Mon Sep 17 00:00:00 2001
+From: Micha Ober <git@ober-mail.de>
+Date: Wed, 31 Jan 2024 21:03:38 +0100
+Subject: [PATCH] More logging 3
+
+---
+ drivers/mtd/nand/spi/core.c | 17 +++++++++++++++--
+ 1 file changed, 15 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/mtd/nand/spi/core.c b/drivers/mtd/nand/spi/core.c
+index 0eeb88f6abe0..404282768de0 100644
+--- a/drivers/mtd/nand/spi/core.c
++++ b/drivers/mtd/nand/spi/core.c
+@@ -155,6 +155,7 @@ static int spinand_read_cfg(struct spinand_device *spinand)
+ 		 */
+ 		ret = spinand_read_reg_op(spinand, REG_CFG,
+ 					  &spinand->cfg_cache[target]);
++		printk(KERN_INFO "spinand_read_cfg target = %d, ret = %d", target, ret);
+ 		if (ret)
+ 			return ret;
+ 	}
+@@ -259,6 +260,8 @@ static int spinand_ondie_ecc_init_ctx(struct nand_device *nand)
+ 	struct mtd_info *mtd = nanddev_to_mtd(nand);
+ 	struct spinand_ondie_ecc_conf *engine_conf;
+ 
++	printk(KERN_INFO "spinand_ondie_ecc_init_ctx");
++
+ 	nand->ecc.ctx.conf.engine_type = NAND_ECC_ENGINE_TYPE_ON_DIE;
+ 	nand->ecc.ctx.conf.step_size = nand->ecc.requirements.step_size;
+ 	nand->ecc.ctx.conf.strength = nand->ecc.requirements.strength;
+@@ -269,10 +272,20 @@ static int spinand_ondie_ecc_init_ctx(struct nand_device *nand)
+ 
+ 	nand->ecc.ctx.priv = engine_conf;
+ 
+-	if (spinand->eccinfo.ooblayout)
++	if (spinand->eccinfo.ooblayout) {
++		printk(KERN_INFO "spinand_ondie_ecc_init_ctx spinand->eccinfo.ooblayout");
+ 		mtd_set_ooblayout(mtd, spinand->eccinfo.ooblayout);
+-	else
++	}
++	else {
++		printk(KERN_INFO "spinand_ondie_ecc_init_ctx spinand_noecc_ooblayout");
+ 		mtd_set_ooblayout(mtd, &spinand_noecc_ooblayout);
++	}
++
++
++	printk(KERN_INFO "spinand_ondie_ecc_init_ctx engine_type = %d", nand->ecc.ctx.conf.engine_type);
++	printk(KERN_INFO "spinand_ondie_ecc_init_ctx step_size = %d", nand->ecc.ctx.conf.step_size);
++	printk(KERN_INFO "spinand_ondie_ecc_init_ctx strength = %d", nand->ecc.ctx.conf.strength);
++
+ 
+ 	return 0;
+ }
+-- 
+2.34.1
+
