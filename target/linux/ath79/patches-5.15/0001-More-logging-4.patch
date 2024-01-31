@@ -1,0 +1,33 @@
+From 6e1081980675002036cadc595019a369c298e899 Mon Sep 17 00:00:00 2001
+From: Micha Ober <git@ober-mail.de>
+Date: Wed, 31 Jan 2024 22:16:15 +0100
+Subject: [PATCH] More logging 4
+
+---
+ drivers/mtd/nand/spi/micron.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/mtd/nand/spi/micron.c b/drivers/mtd/nand/spi/micron.c
+index 9ae636bcc477..9955fdfb045b 100644
+--- a/drivers/mtd/nand/spi/micron.c
++++ b/drivers/mtd/nand/spi/micron.c
+@@ -107,9 +107,15 @@ static int micron_4_ooblayout_free(struct mtd_info *mtd, int section,
+ {
+ 	struct spinand_device *spinand = mtd_to_spinand(mtd);
+ 
++	printk(KERN_INFO "micron_4_ooblayout_free section = %d", section);
++	printk(KERN_INFO "micron_4_ooblayout_free pagesize = %d", spinand->base.memorg.pagesize);
++	printk(KERN_INFO "micron_4_ooblayout_free ecc_step_size = %d", mtd->ecc_step_size);
++
+ 	if (section >= spinand->base.memorg.pagesize /
+-			mtd->ecc_step_size)
++			mtd->ecc_step_size) {
++		printk(KERN_INFO "micron_4_ooblayout_free -ERANGE");
+ 		return -ERANGE;
++	}
+ 
+ 	if (section) {
+ 		region->offset = 16 * section;
+-- 
+2.34.1
+
