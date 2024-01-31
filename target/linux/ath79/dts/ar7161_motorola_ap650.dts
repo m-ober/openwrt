@@ -154,10 +154,6 @@
 			compatible = "fixed-partitions";
 			#address-cells = <1>;
 			#size-cells = <1>;
-			nand-on-flash-bbt;
-			nand-ecc-mode = "soft_bch";
-			nand-ecc-algo = "bch";
-
 
 			partition@0 {
 				label = "rootfs1";
