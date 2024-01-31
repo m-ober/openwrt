@@ -1,0 +1,32 @@
+From e0af77af11b35edcab50732450c2877e0cd8c3cc Mon Sep 17 00:00:00 2001
+From: Micha Ober <git@ober-mail.de>
+Date: Wed, 31 Jan 2024 20:48:59 +0100
+Subject: [PATCH] More logging 2
+
+---
+ drivers/mtd/nand/core.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/drivers/mtd/nand/core.c b/drivers/mtd/nand/core.c
+index 5e13a03d2b32..069957196f9d 100644
+--- a/drivers/mtd/nand/core.c
++++ b/drivers/mtd/nand/core.c
+@@ -377,6 +377,15 @@ int nanddev_init(struct nand_device *nand, const struct nand_ops *ops,
+ 	mtd->size = nanddev_size(nand);
+ 	mtd->owner = owner;
+ 
++	printk(KERN_INFO "nanddev_init type = %d", mtd->type);
++	printk(KERN_INFO "nanddev_init flags = %d", mtd->flags);
++	printk(KERN_INFO "nanddev_init erasesize = %d", mtd->erasesize);
++	printk(KERN_INFO "nanddev_init writesize = %d", mtd->writesize);
++	printk(KERN_INFO "nanddev_init writebufsize = %d", mtd->writebufsize);
++	printk(KERN_INFO "nanddev_init oobsize = %d", mtd->oobsize);
++	printk(KERN_INFO "nanddev_init size = %d", mtd->size);
++	printk(KERN_INFO "nanddev_init owner = %d", mtd->owner);
++
+ 	return nanddev_bbt_init(nand);
+ }
+ EXPORT_SYMBOL_GPL(nanddev_init);
+-- 
+2.34.1
+
