@@ -1,0 +1,32 @@
+From d00b48d2d723cf0851ba16a8dcc212f331204478 Mon Sep 17 00:00:00 2001
+From: Micha Ober <git@ober-mail.de>
+Date: Wed, 31 Jan 2024 22:44:45 +0100
+Subject: [PATCH] Fix micron_4_ooblayout_free
+
+---
+ drivers/mtd/nand/spi/micron.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/mtd/nand/spi/micron.c b/drivers/mtd/nand/spi/micron.c
+index 9955fdfb045b..a0620379a3a3 100644
+--- a/drivers/mtd/nand/spi/micron.c
++++ b/drivers/mtd/nand/spi/micron.c
+@@ -106,13 +106,14 @@ static int micron_4_ooblayout_free(struct mtd_info *mtd, int section,
+ 				   struct mtd_oob_region *region)
+ {
+ 	struct spinand_device *spinand = mtd_to_spinand(mtd);
++	struct nand_device *nand = mtd_to_nanddev(mtd);
+ 
+ 	printk(KERN_INFO "micron_4_ooblayout_free section = %d", section);
+ 	printk(KERN_INFO "micron_4_ooblayout_free pagesize = %d", spinand->base.memorg.pagesize);
+ 	printk(KERN_INFO "micron_4_ooblayout_free ecc_step_size = %d", mtd->ecc_step_size);
+ 
+ 	if (section >= spinand->base.memorg.pagesize /
+-			mtd->ecc_step_size) {
++			nanddev_get_ecc_conf(nand)->step_size) {
+ 		printk(KERN_INFO "micron_4_ooblayout_free -ERANGE");
+ 		return -ERANGE;
+ 	}
+-- 
+2.34.1
+
