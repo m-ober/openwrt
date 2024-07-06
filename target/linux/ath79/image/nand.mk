@@ -320,7 +320,7 @@ define Device/motorola_ap650
   DEVICE_MODEL := AP-650
   DEVICE_PACKAGES := kmod-i2c-gpio kmod-rtc-ds1307
   LOADER_TYPE := bin
-  LOADER_FLASH_OFFS := 0x102000
+  LOADER_FLASH_OFFS := 0xe2000
   COMPILE := loader-$(1).bin
   COMPILE/loader-$(1).bin := loader-okli-compile
   KERNEL := kernel-bin | append-dtb | lzma | uImage lzma -M 0x4f4b4c49 | loader-okli $(1) 8128 | uImage none
