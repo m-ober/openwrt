@@ -121,7 +121,6 @@
 			partition@e0000 {
 				label = "kernel";
 				reg = <0xe0000 0x6a0000>;
-				read-only;
 			};
 
 			partition@780000 {
