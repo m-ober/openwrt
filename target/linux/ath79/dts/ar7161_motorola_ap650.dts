@@ -70,8 +70,8 @@
 
 		resets = <&rst 8>;
 		reset-names = "phy";
-		reset-assert-us = <10000>;
-		reset-deassert-us = <10000>;
+		reset-assert-us = <100000>;
+		reset-deassert-us = <100000>;
 	};
 };
 
