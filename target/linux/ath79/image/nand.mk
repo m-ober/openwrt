@@ -323,7 +323,7 @@ define Device/motorola_ap650
   LOADER_FLASH_OFFS := 0xe2000
   COMPILE := loader-$(1).bin
   COMPILE/loader-$(1).bin := loader-okli-compile
-  KERNEL := kernel-bin | append-dtb | lzma | uImage lzma -M 0x4f4b4c49 | loader-okli $(1) 8128 | uImage none
+  KERNEL := kernel-bin | append-dtb | lzma | loader-kernel
   KERNEL_INITRAMFS := kernel-bin | append-dtb | lzma | loader-kernel
   IMAGE/sysupgrade.bin := sysupgrade-tar | append-metadata
   # KERNEL_SIZE :=
