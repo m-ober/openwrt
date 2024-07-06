@@ -119,14 +119,8 @@
 			};
 
 			partition@e0000 {
-				label = "linux1";
-				reg = <0xe0000 0x350000>;
-				read-only;
-			};
-
-			partition@430000 {
-				label = "linux2";
-				reg = <0x430000 0x350000>;
+				label = "kernel";
+				reg = <0xe0000 0x6a0000>;
 				read-only;
 			};
 
@@ -155,32 +149,8 @@
 			#size-cells = <1>;
 
 			partition@0 {
-				label = "rootfs1";
-				reg = <0x0 0x2980000>;
-			};
-
-			partition@2980000 {
-				label = "rootfs2";
-				reg = <0x2980000 0x2980000>;
-				read-only;
-			};
-
-			partition@5300000 {
-				label = "var2";
-				reg = <0x5300000 0x700000>;
-				read-only;
-			};
-
-			partition@5a00000 {
-				label = "etc2";
-				reg = <0x5a00000 0xa00000>;
-				read-only;
-			};
-
-			partition@6400000 {
-				label = "rootfs_data";
-				reg = <0x6400000 0x1c00000>;
-				read-only;
+				label = "ubi";
+				reg = <0x0 0x8000000>;
 			};
 		};
 	};
